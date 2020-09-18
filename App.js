@@ -1,22 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState} from 'react';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
+import ContatoInput from './components/ContatoInput';
+import ContatoItem from './components/ContatoItem';
 
 export default function App() {
-  const [nome, setNome] = useState ('');
-  const [telefone, setTelefone] = useState ('');
+  
   const[contatos, setContatos] = useState ([]);
   const[contadorContatos, setContadorContatos] = useState(10);
 
-  const capturarNome = (nome) => {
-    setNome(nome);
-  }
-
-  const capturarTelefone = (telefone) => {
-    setTelefone(telefone);
-  }
-
-  const adicionarContato = () => {
+  const adicionarContato = (nome, telefone) => {
     setContatos(contatos => {
       setContadorContatos(contadorContatos + 2);
       return[...contatos, {key: contadorContatos.toString(), value: [nome, telefone]}]
@@ -24,46 +17,34 @@ export default function App() {
     console.log (contadorContatos);
   }
 
+  const removerContato = (keyASerRemovida) => {
+    setContatos(contatos => {
+      return contatos.filter((contatos) => {
+        return contatos.key !== keyASerRemovida
+      })
+    })
+  }
+
   return (
     <View style={estilos.telaPrincipalView}>
-      <View style={estilos.entradaView}>
-        {/*usuário irá inserir seus contatos aqui */}
-        <TextInput 
-        placeholder = "Nome"
-        style={estilos.nomeTextInput}
-        onChangeText={capturarNome}
-        value={nome}
-        /><TextInput 
-        placeholder = "Telefone"
-        style={estilos.telefoneTextInput}
-        onChangeText={capturarTelefone}
-        value={telefone}
-        />
-      
-        <Button
-          title="Adicionar Contato"
-          onPress={adicionarContato}
-        />
-      </View>
-      <View>
-
+      <ContatoInput onAdicionarContato={adicionarContato}/>
         <FlatList
           data={contatos}
           renderItem={
             (nome) => (
-              <View style={estilos.itemNaListaView}>
-                <Text>{nome.item.value}</Text>
-              </View>
-            )}
-            renderItem={
+              <ContatoItem
+                nome={nome.item.value}
+              />
+            ),
             (telefone) => (
-              <View style={estilos.itemNaListaView}>
-                <Text>{' ' + telefone.item.value}</Text>
-              </View>
+              <ContatoItem
+                chave={telefone.item.key}
+                telefone={telefone.item.value}
+                onDelete={removerContato}
+              />
             )
           }
         />
-      </View>
     </View>
   );
 }
@@ -71,34 +52,6 @@ export default function App() {
 const estilos = StyleSheet.create({
   telaPrincipalView: {
    padding: 50
-  },
-
-  nomeTextInput: {
-    borderBottomColor: 'black',
-    borderBottomWidth:1, 
-    marginBottom: 4,
-    padding: 12,
-    textAlign: 'center'
-  },
-  telefoneTextInput: {
-    borderBottomColor: 'black',
-    borderBottomWidth:1, 
-    marginBottom: 4,
-    padding: 12,
-    textAlign: 'center'
-  },
-  itemNaListaView: {
-    padding: 12,
-    backgroundColor: '#ECE',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 8,
-    marginBottom: 8,
-    borderRadius: 8,
-    textAlign: 'center'    
-  },
-  entradaView: {
-    marginBottom: 8
   }
 });
+
