@@ -28,18 +28,14 @@ export default function App() {
   return (
     <View style={estilos.telaPrincipalView}>
       <ContatoInput onAdicionarContato={adicionarContato}/>
-        <FlatList
+      <FlatList
           data={contatos}
           renderItem={
-            (nome) => (
+            (contato) => (
               <ContatoItem
-                nome={nome.item.value}
-              />
-            ),
-            (telefone) => (
-              <ContatoItem
-                chave={telefone.item.key}
-                telefone={telefone.item.value}
+                nome={contato.item.value}
+                telefone={contato.item.value}
+                chave={contato.item.key}
                 onDelete={removerContato}
               />
             )
@@ -51,7 +47,9 @@ export default function App() {
 
 const estilos = StyleSheet.create({
   telaPrincipalView: {
-   padding: 50
+   padding: 50,
+   flexDirection: 'column',
+   flex: 1
   }
 });
 
