@@ -1,4 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import ContatosNavigator from './navegacao/ContatosNavigator';
+
+
+export default function App() {
+ return (
+  <ContatosNavigator />
+ );
+}
+
+/*
 import React, {useState} from 'react';
 import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import ContatoInput from './components/ContatoInput';
@@ -53,3 +63,4 @@ const estilos = StyleSheet.create({
   }
 });
 
+*/

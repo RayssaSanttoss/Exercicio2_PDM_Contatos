@@ -5,6 +5,7 @@ import {
     Button,
     StyleSheet
 } from 'react-native';
+import Cores from '../constantes/Cores';
 
 const ContatoInput = (props) => {
     const [nome, setNome] = useState ('');
@@ -34,6 +35,7 @@ const ContatoInput = (props) => {
             />
             <Button
                 title="Adicionar Contato"
+                color={Cores.primary}
                 onPress={() => props.onAdicionarContato(nome, telefone)}
             />
       </View>
