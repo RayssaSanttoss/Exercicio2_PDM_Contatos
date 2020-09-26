@@ -1,3 +1,6 @@
+//não estamos mais utilizando
+
+/*
 import React, { useState } from 'react';
 import {
     View,
@@ -62,4 +65,4 @@ const estilos = StyleSheet.create({
       }
 });
 
-export default ContatoInput;
+export default ContatoInput;*/

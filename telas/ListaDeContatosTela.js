@@ -2,21 +2,39 @@ import React from 'react';
 import { 
     View, 
     Text, 
-    StyleSheet, Platform 
+    StyleSheet, Platform, FlatList
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import BotaoCabecalho from '../components/BotaoCabecalho';
 
-const ListaDeLugaresTela = (props) => {
+import { useSelector } from 'react-redux';
+import ContatoItem from '../components/ContatoItem';
+
+const ListaDeContatosTela = (props) => {
+
+    const contatos = useSelector(estado => estado.contatos.contatos);
+
+
     return (
-        <View>
-            <Text>Lista De Contatos</Text>
-        </View>
+        <FlatList 
+            data={contatos}
+            keyExtractor={contato => contato.id}
+            renderItem={
+                contato => (
+                    <ContatoItem 
+                        nome={contato.item.nome}
+                        telefone={contato.item.telefone}
+                        onDelete={console.log(contato.item.id)}
+                        imagem={contato.item.imagemURI}
+                    />
+                )
+            }
+        />
     )
 };
 
-ListaDeLugaresTela.navigationOptions = dadosNavegacao => {
+ListaDeContatosTela.navigationOptions = dadosNavegacao => {
     return {
         headerTitle: "Agenda / Lista de Contatos",
         headerRight: () =>{
@@ -41,4 +59,4 @@ const estilos = StyleSheet.create ({
 
 });
 
-export default ListaDeLugaresTela;
+export default ListaDeContatosTela;

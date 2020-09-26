@@ -7,23 +7,28 @@ import {
     TextInput,
     ScrollView
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 import Cores from '../constantes/Cores';
-import ContatoInput from '../components/ContatoInput';
+import * as contatosActions from '../store/contatos-actions';
+import TiraFoto from '../components/TiraFoto';
+import { set } from 'react-native-reanimated';
 
 const NovoContatoTela = (props) => {
-    const[contatos, setContatos] = useState ([]);
-    const[contadorContatos, setContadorContatos] = useState(10);
+    const dispatch = useDispatch();
+
     const [nome, setNome] = useState ('');
     const [telefone, setTelefone] = useState ('');
+    const [imagemURI, setImagemURI] = useState();
 
-    const adicionarContato = (nome, telefone) => {
-        setContatos(contatos => {
-            setContadorContatos(contadorContatos + 2);
-            return[...contatos, {key: contadorContatos.toString(), value: [nome, telefone]}]
-        });
-        console.log (contadorContatos);
+    const fotoTirada = imagemURI => {
+        setImagemURI(imagemURI);
+    }
+
+    const adicionarContato = () => {
+        dispatch(contatosActions.addContato(nome, telefone, imagemURI));
         capturarNome('');
         capturarTelefone('');
+        props.navigation.goBack();
     }
 
     const capturarNome = (nome) => {
@@ -38,7 +43,6 @@ const NovoContatoTela = (props) => {
         <ScrollView>
             <View style={estilos.form}>
                 <Text style={estilos.titulo}>Adicionar Contato</Text>
-                <View style={estilos.entradaView}>
                     <TextInput 
                         placeholder = "Nome"
                         style={estilos.nomeTextInput}
@@ -51,12 +55,12 @@ const NovoContatoTela = (props) => {
                         onChangeText={capturarTelefone}
                         value={telefone}
                     />
+                    <TiraFoto onFotoTirada={fotoTirada}/>
                     <Button
                         title="Adicionar Contato"
                         color={Cores.primary}
                         onPress={adicionarContato}
                     />
-                </View>
             </View>
         </ScrollView>
     )
