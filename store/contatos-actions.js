@@ -1,7 +1,41 @@
 export const ADD_CONTATO = 'ADD-CONTATO';
+export const LISTA_CONTATOS = 'LISTA_CONTATOS';
+import * as FileSystem from 'expo-file-system';
+import { inserirContato, buscarContatos } from '../helpers/db';
 
-export const addContato = (nome, telefone, imagemURI) => {
-    return {
-        type: ADD_CONTATO, dadosContato: {nome: nome, telefone: telefone, imagemURI: imagemURI}
+export const listarContatos = () => {
+    return async dispatch => {
+        try {
+            const resultadoDB = await buscarContatos();
+            console.log(resultadoDB);
+            dispatch({type: LISTA_CONTATOS, contatos: resultadoDB.rows._array || []})
+        }
+        catch(err) {
+            console.log(err);
+            throw err;
+        }
+    }
+}
+
+export const addContato = (nomeContato, imagemURI) => {
+    return async dispatch => {
+        //file://diretorioTemporario/nome.png
+        const nomeArquivo = imagemURI.split('/').pop();
+        const novoPath = FileSystem.documentDirectory + nomeArquivo;
+        try {
+            await FileSystem.moveAsync({
+            from: imagemURI,
+            to: novoPath
+            });
+
+            const resultadoDB = await inserirContato(nomeContato, telefone, novoPath);
+            console.log(resultadoDB);
+            
+            dispatch({type: ADD_LUGAR, dadosLugar: {id: resultadoDB.insertId, nomeContato: nomeContato, telefone: telefone, imagemURI: novoPath}})
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 }
