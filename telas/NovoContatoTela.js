@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import Cores from '../constantes/Cores';
 import * as contatosActions from '../store/contatos-actions';
 import TiraFoto from '../components/TiraFoto';
+import CapturaLocalizacao from '../components/CapturaLocalizacao';
 import { set } from 'react-native-reanimated';
 
 const NovoContatoTela = (props) => {
@@ -56,6 +57,7 @@ const NovoContatoTela = (props) => {
                         value={telefone}
                     />
                     <TiraFoto onFotoTirada={fotoTirada}/>
+                    <CapturaLocalizacao/>
                     <Button
                         title="Adicionar Contato"
                         color={Cores.primary}
