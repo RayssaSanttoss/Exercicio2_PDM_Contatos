@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect } from 'react';
 import { 
     View, 
     Text, 
@@ -11,8 +11,15 @@ import { useDispatch } from 'react-redux';
 import Cores from '../constantes/Cores';
 import * as contatosActions from '../store/contatos-actions';
 import TiraFoto from '../components/TiraFoto';
+import JSON from '../json.js';
+import * as firebase from '../firebase';
+import 'firebase/firestore';
 import CapturaLocalizacao from '../components/CapturaLocalizacao';
 import { set } from 'react-native-reanimated';
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(JSON);
+}
 
 const NovoContatoTela = (props) => {
     const dispatch = useDispatch();
@@ -21,23 +28,44 @@ const NovoContatoTela = (props) => {
     const [telefone, setTelefone] = useState ('');
     const [imagemURI, setImagemURI] = useState();
 
+    useEffect(() => {
+        db.collection('contatos').onSnapshot((snapshot) => {
+          let aux = [];
+          snapshot.forEach (doc => { 
+            aux.push(doc.data());
+          })
+          setLembretes(aux);
+        })
+    }, []);
+
+    const adicionarContato = () => {
+        db.collection('contatos').add({
+            contato: nome,
+            numero: telefone, 
+            foto: imagemURI,
+            data: new Date()
+        })
+        capturarNome('');
+        capturarTelefone('');        
+    }
+
     const fotoTirada = imagemURI => {
         setImagemURI(imagemURI);
     }
 
-    const adicionarContato = () => {
+    /*const adicionarContato = () => {
         dispatch(contatosActions.addContato(nome, telefone, imagemURI));
         capturarNome('');
         capturarTelefone('');
         props.navigation.goBack();
-    }
+    }*/
 
     const capturarNome = (nome) => {
         setNome(nome);
       }
     
     const capturarTelefone = (telefone) => {
-    setTelefone(telefone);
+        setTelefone(telefone);
     }
 
     return (
