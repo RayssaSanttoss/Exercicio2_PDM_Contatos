@@ -16,6 +16,10 @@ import * as firebase from '../firebase';
 import 'firebase/firestore';
 import CapturaLocalizacao from '../components/CapturaLocalizacao';
 import { set } from 'react-native-reanimated';
+import { Picker } from '@react-native-picker/picker';
+import Slider from '@react-native-community/slider';
+
+import * as ImagePicker from 'expo-image-picker';
 
 if (!firebase.apps.length) {
     firebase.initializeApp(JSON);
@@ -53,6 +57,15 @@ const NovoContatoTela = (props) => {
         setImagemURI(imagemURI);
     }
 
+    const tirarFoto = async () => {
+        let foto = await ImagePicker.launchImageLibraryAsync({
+          quality: 1,
+          base64: true
+        })
+        console.log(foto);
+        setFotoURI(foto.uri);
+      }
+
     /*const adicionarContato = () => {
         dispatch(contatosActions.addContato(nome, telefone, imagemURI));
         capturarNome('');
@@ -84,7 +97,7 @@ const NovoContatoTela = (props) => {
                         onChangeText={capturarTelefone}
                         value={telefone}
                     />
-                    <TiraFoto onFotoTirada={fotoTirada}/>
+                    <TiraFoto onFotoTirada={tirarFoto}/>
                     <CapturaLocalizacao/>
                     <Button
                         title="Adicionar Contato"
